@@ -289,14 +289,14 @@ jobs:
             npm run build
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
-            no_output_timeout: 10m
+          no_output_timeout: 10m
       - run:
-            name: Send migration status to kvdb.io
-            command: |
-              if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-              then  
-                  curl https://kvdb.io/7WB7MnqjW6R7adqmQAsFEz/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'    
-              fi
+          name: Send migration status to kvdb.io
+          command: |
+            if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
+            then  
+                curl https://kvdb.io/7WB7MnqjW6R7adqmQAsFEz/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'    
+            fi
             
       - destroy-environment
       - revert-migrations
@@ -442,7 +442,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - dependencies
+      - install_awscli
+      - install_nodejs
       - run:
           name: Save Old Workflow ID to kvdb.io
           command: |
